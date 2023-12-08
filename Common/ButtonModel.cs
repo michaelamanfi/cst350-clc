@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 namespace Minesweeper.Common
 {
     /// <summary>
-    /// This class represents a cell in the grid.
+    /// This class represents a button in the grid.
     /// </summary>
-    public class Cell
+    public class ButtonModel
     {
-        public Cell()
+        public ButtonModel()
         {
             this.Row = -1;
             this.Column = -1;
@@ -21,27 +21,27 @@ namespace Minesweeper.Common
         }
 
         /// <summary>
-        /// The row location of the cell.
+        /// The row location
         /// </summary>
         public int Row { get; set; }
 
         /// <summary>
-        /// The colulmn location of the cell.
+        /// The colulmn location
         /// </summary>
         public int Column { get; set; }
 
         /// <summary>
-        /// Whether or not a cell has been visited.
+        /// Whether or not a button has been visited.
         /// </summary>
         public bool Visited { get; set; }
 
         /// <summary>
-        /// Whether or not a cell is live.
+        /// Whether or not a button is live.
         /// </summary>
         public bool Live { get; set; }
 
         /// <summary>
-        /// The number live neighbors to the cell.
+        /// The number live neighbors to the button.
         /// </summary>
         public int LiveNeighbors { get; set; }
 
@@ -55,7 +55,7 @@ namespace Minesweeper.Common
             this.LiveNeighbors = 0;
         }
         /// <summary>
-        /// Returns a string output for the cell.
+        /// Returns a string output for the button.
         /// </summary>
         /// <returns></returns>
         public override string ToString()

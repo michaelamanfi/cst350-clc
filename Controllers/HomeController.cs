@@ -99,12 +99,12 @@ namespace Minesweeper.Controllers
             else
             {
                 // Apply the flood fill to the game faster.
-                this._gameService.FillAdjacentCells(row, col);
+                this._gameService.FillAdjacentButtons(row, col);
 
                 // Update the buttons
                 this._gameService.UpdateBoardDuringGame();
 
-                //Check if is a successfull (i.e., all non-bomb cells visited).
+                //Check if is a successfull (i.e., all non-bomb buttons visited).
                 if (this._gameService.IsGameSuccess())
                 {
                     //Game won

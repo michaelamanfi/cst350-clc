@@ -2,7 +2,7 @@
 
 namespace Minesweeper.Models
 {
-    public class ButtonModel : Cell
+    public class ButtonModel : Common.ButtonModel
     {
         // Properties
         public string Id { get { return this.ToString(); } }

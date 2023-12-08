@@ -16,19 +16,19 @@ namespace Minesweeper
         bool IsGameSuccess();
 
         /// <summary>
-        /// Fills adjacent cells around a given cell location if conditions are met.
+        /// Fills adjacent buttons around a given button location if conditions are met.
         /// </summary>
-        /// <param name="row">Row index of the cell.</param>
-        /// <param name="col">Column index of the cell.</param>
-        void FillAdjacentCells(int row, int col);
+        /// <param name="row">Row index of the button.</param>
+        /// <param name="col">Column index of the button.</param>
+        void FillAdjacentButtons(int row, int col);
 
         /// <summary>
-        /// Retrieves the state of a specific cell.
+        /// Retrieves the state of a specific button.
         /// </summary>
-        /// <param name="row">Row index of the cell.</param>
-        /// <param name="col">Column index of the cell.</param>
-        /// <returns>The model of the requested cell.</returns>
-        ButtonModel GetButton(int row, int col);
+        /// <param name="row">Row index of the button.</param>
+        /// <param name="col">Column index of the button.</param>
+        /// <returns>The model of the requested button.</returns>
+        Models.ButtonModel GetButton(int row, int col);
 
         /// <summary>
         /// Determines if the game board has been initialized.
@@ -37,10 +37,10 @@ namespace Minesweeper
         bool IsInitialized();
 
         /// <summary>
-        /// Retrieves all cells of the game board.
+        /// Retrieves all buttons of the game board.
         /// </summary>
-        /// <returns>A list containing models of all cells on the board.</returns>
-        List<ButtonModel> GetAllButtons();
+        /// <returns>A list containing models of all buttons on the board.</returns>
+        List<Models.ButtonModel> GetAllButtons();
 
         /// <summary>
         /// Gets the failure status of the game.
@@ -78,10 +78,10 @@ namespace Minesweeper
         string GetGameSuccessMessage();
 
         /// <summary>
-        /// Updates the state of a specific cell.
+        /// Updates the state of a specific button.
         /// </summary>
-        /// <param name="cell">The cell to update.</param>
-        void UpdateCell(Cell cell);
+        /// <param name="button">The button to update.</param>
+        void UpdateButton(Common.ButtonModel button);
 
         /// <summary>
         /// Updates the board's state during the game after each move.

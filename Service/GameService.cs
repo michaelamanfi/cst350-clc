@@ -10,10 +10,10 @@ namespace Minesweeper.Service
     public class GameService : IGameService
     {
         const int GridSize = 9;
-        private Board<ButtonModel> board;
+        private Board<Models.ButtonModel> board;
         public GameService()
         {
-            board = new Board<ButtonModel>(GridSize) { Difficulty = (int)DifficultyLevel.Easy };
+            board = new Board<Models.ButtonModel>(GridSize) { Difficulty = (int)DifficultyLevel.Easy };
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Minesweeper.Service
         /// </summary>
         public void ResetGame()
         {
-            board = new Board<ButtonModel>(GridSize) { Difficulty = (int)DifficultyLevel.Easy };
+            board = new Board<Models.ButtonModel>(GridSize) { Difficulty = (int)DifficultyLevel.Easy };
             board.Success = false;
             board.Failed = false;
             board.SetupLiveNeighbors(); // Randomly assign live bombs
@@ -70,37 +70,37 @@ namespace Minesweeper.Service
         /// <returns>True if game is successful, false otherwise.</returns>
         public bool IsGameSuccess()
         {
-            return board.AllNonBombCellsVisited();
+            return board.AllNonBombButtonsVisited();
         }
 
         /// <summary>
-        /// Fills adjacent cells starting from the specified cell if conditions are met.
+        /// Fills adjacent buttons starting from the specified button if conditions are met.
         /// </summary>
-        /// <param name="row">Row index of the starting cell.</param>
-        /// <param name="col">Column index of the starting cell.</param>
-        public void FillAdjacentCells(int row, int col)
+        /// <param name="row">Row index of the starting button.</param>
+        /// <param name="col">Column index of the starting button.</param>
+        public void FillAdjacentButtons(int row, int col)
         {
             board.FloodFill(row, col);
         }
 
         /// <summary>
-        /// Retrieves the state of a specific cell.
+        /// Retrieves a specific button.
         /// </summary>
-        /// <param name="row">Row index of the cell.</param>
-        /// <param name="col">Column index of the cell.</param>
-        /// <returns>The model of the requested cell.</returns>
-        public ButtonModel GetButton(int row, int col)
+        /// <param name="row">Row index of the button.</param>
+        /// <param name="col">Column index of the button.</param>
+        /// <returns>The model of the requested button.</returns>
+        public Models.ButtonModel GetButton(int row, int col)
         {
-            return board.GetCell(row, col);
+            return board.GetButtonByLocation(row, col);
         }
 
         /// <summary>
-        /// Retrieves all cells of the game board.
+        /// Retrieves all buttons on the game board.
         /// </summary>
-        /// <returns>A list of models representing all cells on the board.</returns>
-        public List<ButtonModel> GetAllButtons()
+        /// <returns>A list of models representing all buttons on the board.</returns>
+        public List<Models.ButtonModel> GetAllButtons()
         {
-            return board.GetCells();
+            return board.GetButtons();
         }
 
         /// <summary>
@@ -157,28 +157,28 @@ namespace Minesweeper.Service
         }
 
         /// <summary>
-        /// Updates the state of a specific cell.
+        /// Updates the state of a specific button.
         /// </summary>
-        /// <param name="cell">The cell to update.</param>
-        public void UpdateCell(Cell cell)
+        /// <param name="button">The button to update.</param>
+        public void UpdateButton(Common.ButtonModel button)
         {
-            if (cell.Visited)
+            if (button.Visited)
             {
-                if (cell.LiveNeighbors > 0)
+                if (button.LiveNeighbors > 0)
                 {
                     // Update the button to reflect the number of neighbors with bombs.
-                    this.board.GetCell(cell.Row, cell.Column).ButtonState = 1;
+                    this.board.GetButtonByLocation(button.Row, button.Column).ButtonState = 1;
                 }
                 else
                 {
                     // Update the button to reflect visited
-                    this.board.GetCell(cell.Row, cell.Column).ButtonState = 1;
+                    this.board.GetButtonByLocation(button.Row, button.Column).ButtonState = 1;
                 }
             }
             else
             {
                 // Update the button to reflect not visited.
-                this.board.GetCell(cell.Row, cell.Column).ButtonState = 0;
+                this.board.GetButtonByLocation(button.Row, button.Column).ButtonState = 0;
             }
         }
 
@@ -189,8 +189,8 @@ namespace Minesweeper.Service
         {
             Iterator.ForEachContinueOnFalse(GridSize, (int r, int c) =>
             {
-                var cell = this.board.Grid[r, c];
-                this.UpdateCell(cell);
+                var button = this.board.Grid[r, c];
+                this.UpdateButton(button);
             }, null);
         }
 
@@ -202,16 +202,16 @@ namespace Minesweeper.Service
         {
             Iterator.ForEachContinueOnFalse(GridSize, (int r, int c) =>
             {
-                var cell = this.board.Grid[r, c];
-                if (cell.Live)
+                var button = this.board.Grid[r, c];
+                if (button.Live)
                 {
-                    // Reveal pu or bomb cells.
-                    this.board.GetCell(cell.Row, cell.Column).ButtonState = winner ? 3 : 2;
+                    // Reveal updated button.
+                    this.board.GetButtonByLocation(button.Row, button.Column).ButtonState = winner ? 3 : 2;
                 }
             }, (int r, int c) =>
             {
-                var cell = this.board.Grid[r, c];
-                if (cell.Visited)
+                var button = this.board.Grid[r, c];
+                if (button.Visited)
                     return false;
 
                 return true;

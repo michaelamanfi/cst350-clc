@@ -7,7 +7,7 @@ namespace Minesweeper.Common
     /// </summary>
     public class Iterator
     { /// <summary>
-      /// A delegate to perform action for the specified cell (r, and c).
+      /// A delegate to perform action for the specified button (r, and c).
       /// </summary>
       /// <param name="r"></param>
       /// <param name="c"></param>
@@ -15,7 +15,7 @@ namespace Minesweeper.Common
 
         /// <summary>
         /// A delegate to determine if GridAction should be performed 
-        /// for the specified cell (r, and c).
+        /// for the specified button (r, and c).
         /// </summary>
         /// <param name="r"></param>
         /// <param name="c"></param>
@@ -23,7 +23,7 @@ namespace Minesweeper.Common
         public delegate bool GridActionEval(int r, int c);
 
         /// <summary>
-        /// Perform action for each cell coordinate while optionally skipping some.
+        /// Perform action for each button coordinate while optionally skipping some.
         /// </summary>
         /// <param name="size">The size of the 2D array</param>
         /// <param name="action">The action delegate</param>
@@ -43,7 +43,7 @@ namespace Minesweeper.Common
         }
 
         /// <summary>
-        /// Evaluate each cell coordinate and terminate the iteration on a false return.
+        /// Evaluate each button coordinate and terminate the iteration on a false return.
         /// </summary>
         /// <param name="size">The size of the 2D array</param>
         /// <param name="actionEval">The evalution delegate</param>
