@@ -1,7 +1,10 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,16 +29,29 @@ namespace Minesweeper
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
-            services.AddSingleton(typeof(IUserDAL),typeof(UserDAL));
+            // Configure your authentication scheme here
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .AddCookie(options =>
+                    {
+                        options.LoginPath = "/Login";
+                    });
+
+            services.AddControllersWithViews(options =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                                 .RequireAuthenticatedUser()
+                                 .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            });
+
+            services.AddSingleton(typeof(IUserDAL), typeof(UserDAL));
             services.AddSingleton(typeof(IUserService), typeof(UserService));
             services.AddSingleton(typeof(IPasswordHasherService), typeof(PasswordHasherService));
             services.AddSingleton(typeof(IAuthenticationService), typeof(AuthenticationService));
             services.AddSingleton(typeof(IPasswordHasher<object>), typeof(PasswordHasher<object>));
+            services.AddSingleton(typeof(IGameService), typeof(GameService));
 
             
-
-
 
         }
 
@@ -57,6 +73,7 @@ namespace Minesweeper
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

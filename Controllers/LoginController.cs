@@ -1,24 +1,28 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Minesweeper.Models;
-using Minesweeper.Service;
-
-namespace Minesweeper.Controllers
+﻿namespace Minesweeper.Controllers
 {
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authentication.Cookies;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using Minesweeper.Models; // Assuming UserModel is in this namespace
+    using Minesweeper.Models;    
+    using System.Collections.Generic;
+    using System.Security.Claims;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Controller for handling user login.
     /// </summary>
+    /// 
+    [AllowAnonymous]
     public class LoginController : Controller
     {
-        private readonly IAuthenticationService _authenticationService;
+        private readonly Minesweeper.IAuthenticationService _authenticationService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LoginController"/>.
         /// </summary>
         /// <param name="authenticationService">The authentication service for handling user login operations.</param>
-        public LoginController(IAuthenticationService authenticationService)
+        public LoginController(Minesweeper.IAuthenticationService authenticationService)
         {
             _authenticationService = authenticationService;
         }
@@ -45,13 +49,49 @@ namespace Minesweeper.Controllers
         /// If the credentials are valid, the LoginSuccess view is returned.
         /// If the credentials are invalid, the LoginFailure view is returned.
         /// </remarks>
-        public IActionResult ProcessLogin(UserModel user)
+        public async Task<IActionResult> ProcessLoginAsync(UserModel user)
         {
             bool valid = _authenticationService.Authenticate(user);
             if (valid)
-                return View("LoginSuccess", user);
+            {
+                var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.Username),
+                // You can add more claims here if needed
+            };
+
+                var claimsIdentity = new ClaimsIdentity(
+                    claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                var authProperties = new AuthenticationProperties
+                {
+                     IsPersistent = true,
+                      AllowRefresh = true,
+                };
+
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(claimsIdentity),
+                    authProperties);
+
+                return RedirectToAction("Index", "Home");
+            }
             else
                 return View("LoginFailure", user);
+        }
+
+        /// <summary>
+        /// Processes the user logout request.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> Logout()
+        {
+            // Clear the existing external cookie
+            await HttpContext.SignOutAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme);
+
+            // Redirect to home page or login page after logout
+            return RedirectToAction("Index", "Home");
         }
     }
 

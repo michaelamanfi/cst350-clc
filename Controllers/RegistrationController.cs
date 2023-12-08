@@ -4,12 +4,16 @@ using Minesweeper.Service;
 
 namespace Minesweeper.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Minesweeper.Models; // Assuming UserModel is in this namespace
 
     /// <summary>
     /// Controller for handling user registration.
     /// </summary>
+    ///
+
+    [AllowAnonymous]
     public class RegistrationController : Controller
     {
         private readonly IUserService _userService;
