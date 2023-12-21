@@ -47,7 +47,7 @@ namespace Minesweeper.Service
         /// <returns>Game failed message.</returns>
         public string GetGameFailedMessage()
         {
-            this.SetSuccessMessage("You failed!");
+            this.SetSuccessMessage("You hit a min! You failed!");
             this.SetSuccessStatus(false);
             this.SetFailureStatus(true);
             return this.GetGamePlayMessage();

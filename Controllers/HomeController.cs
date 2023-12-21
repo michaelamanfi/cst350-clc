@@ -14,6 +14,10 @@ namespace Minesweeper.Controllers
     public class HomeController : Controller
     {              
         private readonly IGameService _gameService;
+        /// <summary>
+        /// Initialize the controller with IGameService. 
+        /// </summary>
+        /// <param name="gameService"></param>
         public HomeController(IGameService gameService)
         {
             _gameService = gameService;
