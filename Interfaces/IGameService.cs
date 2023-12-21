@@ -93,5 +93,7 @@ namespace Minesweeper
         /// </summary>
         /// <param name="winner">Indicates if the game ended in a win.</param>
         void UpdateBoardEndOfGame(bool winner);
+
+        bool GameEnded();
     }
 }

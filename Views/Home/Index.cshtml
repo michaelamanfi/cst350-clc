@@ -32,30 +32,35 @@
 
 @{
     // store image names in an array for more efficient code.
-    string[] imageNames = { "blue-button.png", "green-button.png", "red-button.png","purple-button.png" };
+    string[] imageNames = { "blue-button.png", "green-button.png", "red-button.png","Flag.png" };
 }
 
-    @if(ViewBag.SuccessMessage != null && !string.IsNullOrWhiteSpace(ViewBag.SuccessMessage))
+  @if(ViewBag.SuccessMessage != null && !string.IsNullOrWhiteSpace(ViewBag.SuccessMessage))
     {
         <div class="alert alert-success">@ViewBag.SuccessMessage</div>
     }
+
+    <p>Current Time: @DateTime.Now</p>
 <form>
     <div class="button-zone">
         @for (int i = 0; i < Model.Count(); i++)
         {
-            // start a new line every five elements.
-            if (i % 9 == 0)
+            // start a new line every 9 elements.
+            if (i % 5 == 0)
             {
                 <div class="line-break"></div>
             }
-
-            <button class="game-button" type="submit" value="@Model.ElementAt(i).Id" name="buttonNumber" asp-controller="Home" asp-action="HandleButtonClick">
+            <div class="oneButton" id=@Model.ElementAt(i).Id>
+            <button class="game-button" type="submit" value="@Model.ElementAt(i).Id" name="buttonNumber"  asp-controller="Home" asp-action="HandleButtonClick">
                 <img class="game-button-image" src="~/img/@imageNames[Model.ElementAt(i).ButtonState]" />
-                <div class="button-label">                    
-                    [@Model.ElementAt(i).LiveNeighbors]
+                <div class="button-label">
+                    [@Model.ElementAt(i).Id, @Model.ElementAt(i).LiveNeighbors]
                 </div>
             </button>
+            </div>
         }
     </div>
 </form>
+
+
 

@@ -9,11 +9,11 @@ namespace Minesweeper.Service
     /// </summary>
     public class GameService : IGameService
     {
-        const int GridSize = 9;
+        const int GridSize = 5;
         private Board<Models.ButtonModel> board;
         public GameService()
         {
-            board = new Board<Models.ButtonModel>(GridSize) { Difficulty = (int)DifficultyLevel.Easy };
+            board = new Board<Models.ButtonModel>(GridSize) { Difficulty = (int)DifficultyLevel.Moderate };
         }
 
         /// <summary>
@@ -23,12 +23,13 @@ namespace Minesweeper.Service
         /// </summary>
         public void ResetGame()
         {
-            board = new Board<Models.ButtonModel>(GridSize) { Difficulty = (int)DifficultyLevel.Easy };
+            board = new Board<Models.ButtonModel>(GridSize) { Difficulty = (int)DifficultyLevel.Moderate };
             board.Success = false;
             board.Failed = false;
             board.SetupLiveNeighbors(); // Randomly assign live bombs
             board.CalculateLiveNeighbors(); // Calculate live neighbors
             board.Initialized = true;
+
         }
 
         /// <summary>
@@ -164,21 +165,12 @@ namespace Minesweeper.Service
         {
             if (button.Visited)
             {
-                if (button.LiveNeighbors > 0)
-                {
-                    // Update the button to reflect the number of neighbors with bombs.
-                    this.board.GetButtonByLocation(button.Row, button.Column).ButtonState = 1;
-                }
-                else
-                {
-                    // Update the button to reflect visited
-                    this.board.GetButtonByLocation(button.Row, button.Column).ButtonState = 1;
-                }
+                button.ButtonState = (int)ButtonType.GREEN;
             }
             else
             {
                 // Update the button to reflect not visited.
-                this.board.GetButtonByLocation(button.Row, button.Column).ButtonState = 0;
+                button.ButtonState = (int)ButtonType.BLUE;
             }
         }
 
@@ -206,7 +198,7 @@ namespace Minesweeper.Service
                 if (button.Live)
                 {
                     // Reveal updated button.
-                    this.board.GetButtonByLocation(button.Row, button.Column).ButtonState = winner ? 3 : 2;
+                    button.ButtonState = (int)ButtonType.RED;
                 }
             }, (int r, int c) =>
             {
@@ -216,6 +208,23 @@ namespace Minesweeper.Service
 
                 return true;
             });
+        }
+        /// <summary>
+        /// Check if the game ended in failure.
+        /// </summary>
+        /// <returns></returns>
+        public bool GameEnded()
+        {
+            for (int row = 0; row < board.Size; row++)
+            {
+                for (int col = 0; col < board.Size; col++)
+                {
+                    var button = board.Grid[row, col];
+                    if (button.ButtonState == (int)ButtonType.RED)
+                        return true;
+                }
+            }
+            return board.AllNonBombButtonsVisited();
         }
     }
 }

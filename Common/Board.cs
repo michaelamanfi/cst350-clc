@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Minesweeper.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,7 @@ namespace Minesweeper.Common
             Iterator.ForEachContinueOnFalse(size, (int r, int c) =>
             {
                 ButtonModel button = (ButtonModel)Activator.CreateInstance(typeof(T));
+                button.ButtonState = (int)ButtonType.BLUE;
                 button.Row = r;
                 button.Column = c;
                 this.Grid[r, c] = button;

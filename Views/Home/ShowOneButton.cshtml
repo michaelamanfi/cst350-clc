@@ -1,0 +1,13 @@
+﻿@model Minesweeper.Models.ButtonModel
+
+@{
+    // store image names in an array for more efficient code.
+    string[] imageNames = { "blue-button.png", "green-button.png", "red-button.png","Flag.png" };
+}
+
+            <button class="game-button" type="submit" value="@Model.Id" name="buttonNumber"  asp-controller="Home" asp-action="HandleButtonClick">
+                <img class="game-button-image" src="~/img/@imageNames[Model.ButtonState]" />
+                <div class="button-label">                    
+                    [@Model.Id, @Model.LiveNeighbors]
+                </div>
+            </button>

@@ -20,6 +20,8 @@ namespace Minesweeper.Common
             this.LiveNeighbors = 0;
         }
 
+        public int ButtonPreviousState { get; set; }
+        public int ButtonState { get; set; }
         /// <summary>
         /// The row location
         /// </summary>
@@ -55,12 +57,12 @@ namespace Minesweeper.Common
             this.LiveNeighbors = 0;
         }
         /// <summary>
-        /// Returns a string output for the button.
+        /// Returns a string output for the button (button coordinates).
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("{0},{1}", this.Row, this.Column);
+            return string.Format("{0}_{1}", this.Row, this.Column);
         }
     }
 }

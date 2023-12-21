@@ -6,7 +6,6 @@ namespace Minesweeper.Models
     {
         // Properties
         public string Id { get { return this.ToString(); } }
-        public int ButtonState { get; set; }
 
         // Default constructor
         public ButtonModel()

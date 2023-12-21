@@ -24,16 +24,45 @@ namespace Minesweeper.Controllers
         /// </summary>
         /// <returns></returns>
         public IActionResult Index()
-        {            
-            var buttons = _gameService.GetAllButtons();
+        {
+            return Reset();
+        }
 
-            // Reset the game if not already initialized.
-            if (!_gameService.IsInitialized())
-            {
-                this._gameService.ResetGame();
-            }
+        /// <summary>
+        /// Display game success message.
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Success()
+        {
+            //Reveal bombs.
+            this._gameService.UpdateBoardEndOfGame(true);
 
-            // Send the button list to the "Index" page
+            // Get the buttons to display.
+            var buttons = this._gameService.GetAllButtons();
+
+            // Display the failed game results.                
+            ViewBag.SuccessMessage = this._gameService.GetGameSuccessMessage();
+
+            // Send the button list to the "Index" page.
+            return View("Index", buttons);
+        }
+
+        /// <summary>
+        /// Display game failed message.
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Failed()
+        {
+            //Reveal bombs.
+            this._gameService.UpdateBoardEndOfGame(false);
+
+            // Get the buttons to display.
+            var buttons = this._gameService.GetAllButtons();
+
+            // Display the failed game results.                
+            ViewBag.SuccessMessage = this._gameService.GetGameFailedMessage();
+
+            // Send the button list to the "Index" page.
             return View("Index", buttons);
         }
 
@@ -59,10 +88,9 @@ namespace Minesweeper.Controllers
         /// <param name="buttonNumber"></param>
         /// <returns></returns>
         public IActionResult HandleButtonClick(string buttonNumber)
-        {
-            //Check the game status
+        { //Check the game status
             bool success = this._gameService.GetSuccessStatus();
-            bool failure = this._gameService.GetFailureStatus();    
+            bool failure = this._gameService.GetFailureStatus();
             if (success || failure)
             {
                 //Set the game play message to display to the user.
@@ -73,7 +101,7 @@ namespace Minesweeper.Controllers
                 return View("Index", allButtons);
             }
 
-            string[] location = buttonNumber.Split(',');
+            string[] location = buttonNumber.Split('_');
 
             // Convert from strings to ints.
             int row = int.Parse(location[0]);
@@ -94,7 +122,7 @@ namespace Minesweeper.Controllers
                 this._gameService.UpdateBoardEndOfGame(false);
 
                 // Display the failed game results.                
-                ViewBag.SuccessMessage = this._gameService.GetGameFailedMessage();     
+                ViewBag.SuccessMessage = this._gameService.GetGameFailedMessage();
             }
             else
             {
@@ -119,6 +147,123 @@ namespace Minesweeper.Controllers
 
             // re-display the buttons
             return View("Index", buttons);
+        }
+
+        /// <summary>
+        /// Retrieves a button.
+        /// </summary>
+        /// <param name="buttonNumber"></param>
+        /// <returns></returns>
+        public JsonResult GetButton(string buttonNumber)
+        {
+            string[] location = buttonNumber.Split('_');
+
+            // Convert from strings to ints.
+            int row = int.Parse(location[0]);
+            int col = int.Parse(location[1]);
+
+            var currentButton = this._gameService.GetButton(row, col);
+            bool gameEnded = this._gameService.GameEnded();
+            var response = new
+            {
+                Live = currentButton.Live,
+                Visited = currentButton.Visited,
+                ended = gameEnded,
+            };
+
+            return Json(response);
+        }
+        /// <summary>
+        /// Determines if game is a success.
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult IsGameSuccess()
+        {
+            if (this._gameService.IsGameSuccess())
+            {
+                //Game won
+                this._gameService.UpdateBoardEndOfGame(true);
+                var response = new
+                {
+                    Success = true,                    
+                };
+
+                return Json(response);
+            }
+            else
+            {
+                var response = new
+                {
+                    Success = false,
+                };
+
+                return Json(response);
+            }
+        }
+
+        /// <summary>
+        /// Update button on left-click.
+        /// </summary>
+        /// <param name="buttonNumber"></param>
+        /// <returns></returns>
+        public IActionResult ShowOneButton(string buttonNumber)
+        {
+            // Get the buttons.
+            var buttons = this._gameService.GetAllButtons();
+            string[] location = buttonNumber.Split('_');
+
+            // Convert from strings to ints.
+            int row = int.Parse(location[0]);
+            int col = int.Parse(location[1]);
+
+            var currentButton = this._gameService.GetButton(row, col);
+
+            //Do nothing, it's a flag.
+            if (currentButton.ButtonState == (int)ButtonType.FLAG)
+                return PartialView(currentButton);
+
+            //It's a live bomb
+            if (currentButton.Live)
+            {
+                currentButton.Visited = true;
+                currentButton.ButtonState = (int)ButtonType.RED;                
+                return PartialView(currentButton);
+            }                
+
+            // We're vising the button.
+            currentButton.ButtonState = (int)ButtonType.GREEN;
+            currentButton.Visited = true;
+
+            // Re-render the button that was clicked
+            return PartialView(currentButton);
+        }
+
+        /// <summary>
+        /// Update button on right-click with flag.
+        /// </summary>
+        /// <param name="buttonNumber"></param>
+        /// <returns></returns>
+        public IActionResult RightClickShowOneButton(string buttonNumber)
+        {                        
+            string[] location = buttonNumber.Split('_'); // Grid coordinates is in the form of x_y.
+
+            // Convert from strings to ints.
+            int row = int.Parse(location[0]);
+            int col = int.Parse(location[1]);
+
+            var currentButton = this._gameService.GetButton(row, col);
+
+            // on right click always reset to 0.
+            if (currentButton.ButtonState == (int)ButtonType.FLAG)
+                currentButton.ButtonState = currentButton.ButtonPreviousState; // Restore the previous state
+            else
+            {
+                currentButton.ButtonPreviousState = currentButton.ButtonState;  // Capture the previous state
+                currentButton.ButtonState = (int)ButtonType.FLAG;
+            }
+
+            // re-display the button that was clicked
+            return PartialView("ShowOneButton", currentButton);
         }
 
         /// <summary>
