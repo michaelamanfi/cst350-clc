@@ -47,7 +47,7 @@ namespace Minesweeper.Service
         /// <returns>Game failed message.</returns>
         public string GetGameFailedMessage()
         {
-            this.SetSuccessMessage("You hit a min! You failed!");
+            this.SetSuccessMessage("You hit a Bomb! You failed!");
             this.SetSuccessStatus(false);
             this.SetFailureStatus(true);
             return this.GetGamePlayMessage();
@@ -59,7 +59,7 @@ namespace Minesweeper.Service
         /// <returns>Game success message.</returns>
         public string GetGameSuccessMessage()
         {
-            this.SetSuccessMessage("Congratulations! You won!!");
+            this.SetSuccessMessage("Congratulations! You won!!!");
             this.SetSuccessStatus(true);
             this.SetFailureStatus(false);
             return this.GetGamePlayMessage();

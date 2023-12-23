@@ -7,7 +7,14 @@
 
             <button class="game-button" type="submit" value="@Model.Id" name="buttonNumber"  asp-controller="Home" asp-action="HandleButtonClick">
                 <img class="game-button-image" src="~/img/@imageNames[Model.ButtonState]" />
-                <div class="button-label">                    
-                    [@Model.Id, @Model.LiveNeighbors]
+                <div class="button-label">
+                    @if (Model.Live)
+                    {
+                        <span>[B]</span>
+                    }
+                    else
+                    {
+                        <span>[N]</span>
+                    }
                 </div>
             </button>

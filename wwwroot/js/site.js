@@ -11,11 +11,19 @@ $(function () {
                 event.preventDefault(); //Disable the default behavior
 
                 var buttonNumber = $(this).val(); //Button coordinates is in the form x_y.
+
+                // Update the button before check the status of the game.
+                doButtonUpdate(buttonNumber, "/Home/ShowOneButton");
+
                 hitBomb(buttonNumber).then(function (response) {
                     if (response.live) {
                         //Redirect to failed page
                         window.location.href = '/home/failed';
-                    } else if (response.ended) {
+                    } else if (response.success) {
+                        //Redirect to success page
+                        window.location.href = '/home/success';
+                    }
+                    else if (response.ended) {
                         alert("Sorry, game has ended. Please click OK to reset the game.");
                         window.location.href = '/home/reset';
                     }
@@ -23,16 +31,6 @@ $(function () {
                     alert("There was an error in the AJAX call.");
                 });
 
-                isGameSuccess().then(function (response) {
-                    if (response.success) {
-                        //Redirect to success page
-                        window.location.href = '/home/success';
-                    }
-                }).catch(function (error) {
-                    alert("There was an error in the AJAX call.");
-                });
-
-                doButtonUpdate(buttonNumber, "/Home/ShowOneButton");
                 break;
             case 3:
                 event.preventDefault(); //Disable the default behavior
@@ -69,29 +67,7 @@ function doButtonUpdate(buttonNumber, urlString) {
 }
 
 /**
- * This function determines if the game succeeded.
- */
-function isGameSuccess() {
-    // Return a new Promise
-    return new Promise((resolve, reject) => {
-        $.ajax({
-            datatype: "json",
-            method: 'POST',
-            url: '/Home/IsGameSuccess', // URL to the server-side IsGameSuccess method            
-            success: function (response) {
-                //Resolve the Promise with true.
-                resolve(response);
-            },
-            error: function () {
-                // If there's an error with the AJAX call, reject the Promise
-                reject(false);
-            }
-        });
-    });
-}
-
-/**
- * This function uses a Promise to determine if the game has ended or the user hit a bomb.
+ * This function uses a Promise to return the state of play.
  * @param {any} buttonNumber
  */
 function hitBomb(buttonNumber) {
@@ -103,7 +79,7 @@ function hitBomb(buttonNumber) {
             data: {
                 "buttonNumber": buttonNumber
             },
-            url: '/Home/GetButton', // URL to the server-side GetButton method
+            url: '/Home/GetButtonMetadata', // URL to the server-side GetButtonMetadata method
             success: function (response) {
                 //Resolve the Promise with response.
                 resolve(response);

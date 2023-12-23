@@ -54,7 +54,14 @@
             <button class="game-button" type="submit" value="@Model.ElementAt(i).Id" name="buttonNumber"  asp-controller="Home" asp-action="HandleButtonClick">
                 <img class="game-button-image" src="~/img/@imageNames[Model.ElementAt(i).ButtonState]" />
                 <div class="button-label">
-                    [@Model.ElementAt(i).Id, @Model.ElementAt(i).LiveNeighbors]
+                    @if (Model.ElementAt(i).Live)
+                    {
+                        <span>[B]</span>
+                    }
+                    else
+                    {
+                        <span>[N]</span>
+                    }
                 </div>
             </button>
             </div>

@@ -38,17 +38,7 @@ namespace Minesweeper.Controllers
         /// <returns></returns>
         public IActionResult Success()
         {
-            //Reveal bombs.
-            this._gameService.UpdateBoardEndOfGame(true);
-
-            // Get the buttons to display.
-            var buttons = this._gameService.GetAllButtons();
-
-            // Display the failed game results.                
-            ViewBag.SuccessMessage = this._gameService.GetGameSuccessMessage();
-
-            // Send the button list to the "Index" page.
-            return View("Index", buttons);
+            return ProcessGame(true);
         }
 
         /// <summary>
@@ -57,14 +47,26 @@ namespace Minesweeper.Controllers
         /// <returns></returns>
         public IActionResult Failed()
         {
+            return ProcessGame(false);
+        }
+
+        /// <summary>
+        /// Display game output.
+        /// </summary>
+        /// <param name="success"></param>
+        /// <returns></returns>
+        public IActionResult ProcessGame(bool success)
+        {
             //Reveal bombs.
-            this._gameService.UpdateBoardEndOfGame(false);
+            this._gameService.UpdateBoardEndOfGame(success);
 
             // Get the buttons to display.
             var buttons = this._gameService.GetAllButtons();
 
-            // Display the failed game results.                
-            ViewBag.SuccessMessage = this._gameService.GetGameFailedMessage();
+            if (success)
+                ViewBag.SuccessMessage = this._gameService.GetGameSuccessMessage();
+            else
+                ViewBag.SuccessMessage = this._gameService.GetGameFailedMessage();
 
             // Send the button list to the "Index" page.
             return View("Index", buttons);
@@ -85,7 +87,7 @@ namespace Minesweeper.Controllers
             // Send the button list to the "Index" page.
             return View("Index", buttons);
         }
-
+        
         /// <summary>
         /// Handles each button's right click.
         /// </summary>
@@ -158,7 +160,7 @@ namespace Minesweeper.Controllers
         /// </summary>
         /// <param name="buttonNumber"></param>
         /// <returns></returns>
-        public JsonResult GetButton(string buttonNumber)
+        public JsonResult GetButtonMetadata(string buttonNumber)
         {
             string[] location = buttonNumber.Split('_');
 
@@ -168,41 +170,21 @@ namespace Minesweeper.Controllers
 
             var currentButton = this._gameService.GetButton(row, col);
             bool gameEnded = this._gameService.GameEnded();
+            bool gameSuccess = this._gameService.IsGameSuccess();
+
+            //Game won
+            if (gameSuccess)
+                this._gameService.UpdateBoardEndOfGame(true);
+
             var response = new
             {
-                Live = currentButton.Live,
-                Visited = currentButton.Visited,
+                live = currentButton.Live,
+                visited = currentButton.Visited,
                 ended = gameEnded,
+                success = gameSuccess
             };
 
             return Json(response);
-        }
-        /// <summary>
-        /// Determines if game is a success.
-        /// </summary>
-        /// <returns></returns>
-        public JsonResult IsGameSuccess()
-        {
-            if (this._gameService.IsGameSuccess())
-            {
-                //Game won
-                this._gameService.UpdateBoardEndOfGame(true);
-                var response = new
-                {
-                    Success = true,                    
-                };
-
-                return Json(response);
-            }
-            else
-            {
-                var response = new
-                {
-                    Success = false,
-                };
-
-                return Json(response);
-            }
         }
 
         /// <summary>
