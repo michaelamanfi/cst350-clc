@@ -188,6 +188,47 @@
 
             return null;
         }
+        /// <summary>
+        /// Retrieves a user by their username.
+        /// </summary>
+        /// <param name="username">The username of the user to retrieve.</param>
+        /// <returns>A UserModel if found, otherwise null.</returns>
+        public UserModel GetUser(string username)
+        {
+            UserModel user = null;
+
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                string sql = "SELECT * FROM Users WHERE Username = @Username";                
+
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Username", username);
+
+                    conn.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            user = new UserModel
+                            {
+                                UserId = Convert.ToInt32(reader["UserId"]),
+                                FirstName = reader["FirstName"].ToString(),
+                                LastName = reader["LastName"].ToString(),
+                                Sex = reader["Sex"].ToString(),
+                                Age = Convert.ToInt32(reader["Age"]),
+                                State = reader["State"].ToString(),
+                                EmailAddress = reader["EmailAddress"].ToString(),
+                                Username = reader["Username"].ToString(),
+                                Password = reader["Password"].ToString()
+                            };
+                        }
+                    }
+                }
+            }
+
+            return user;
+        }
     }
 
 }

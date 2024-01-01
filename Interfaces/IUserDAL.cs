@@ -33,6 +33,13 @@ namespace Minesweeper
         UserModel GetUser(int userId);
 
         /// <summary>
+        /// Retrieves a user's details from the database.
+        /// </summary>
+        /// <param name="username">The username of the user to retrieve.</param>
+        /// <returns>The user model containing the details of the user. Returns null if the user is not found.</returns>
+        UserModel GetUser(string username);
+
+        /// <summary>
         /// Updates the details of an existing user in the database.
         /// </summary>
         /// <param name="user">The user model containing the updated details of the user. The user is identified by the UserId within the model.</param>

@@ -9,6 +9,57 @@ namespace Minesweeper
     /// </summary>
     public interface IGameService
     {
+        void DeleteGame(int id);
+
+        bool HasValidGameId();
+        void UpdateGame(GameStatus gameStatus);
+
+        /// <summary>
+        /// Retrieves a list of all games.
+        /// </summary>
+        /// <returns>A list of GameModel representing all games.</returns>
+        /// <remarks>
+        /// This method fetches all games from the data access layer, and then projects
+        /// them into GameModel instances. It includes the game ID, display name, creation and 
+        /// modification dates, game status, and the full name of the user associated with each game.
+        /// </remarks>
+        List<GameModel> GetAllGames();
+
+        /// <summary>
+        /// Retrieves a specific game by its unique identifier.
+        /// </summary>
+        /// <param name="gameId">The unique identifier of the game.</param>
+        /// <returns>A GameModel representing the game if found; otherwise, null.</returns>
+        /// <remarks>
+        /// This method fetches a single game based on the provided game ID. It constructs
+        /// a GameModel that includes the game's ID, display name, creation and modification dates,
+        /// game status, and the full name of the associated user.
+        /// </remarks>
+        GameModel GetGameById(int gameId);
+
+        /// <summary>
+        /// Saves the current state of a game associated with a user.
+        /// </summary>
+        /// <param name="userName">The username associated with the game.</param>
+        /// <param name="gameModel">The game model containing the game's data.</param>
+        /// <remarks>
+        /// This method retrieves the user information based on the provided userName,
+        /// creates a new GameDbModel object with the game's state and associated user data,
+        /// and then saves this data to the database.
+        /// </remarks>
+        void Save(string userName, GameModel gameModel);
+
+        /// <summary>
+        /// Opens and initializes a game from a stored game state.
+        /// </summary>
+        /// <param name="gameModel">The game model containing the game's identification data.</param>
+        /// <remarks>
+        /// This method retrieves the stored game state using the game's ID from the database,
+        /// then deserializes the JSON data into a Board object.
+        /// It's assumed that the 'Json' field in the stored game state represents the serialized board.
+        /// </remarks>
+        void Open(GameModel gameModel);
+
         /// <summary>
         /// Checks if the game has been successfully completed.
         /// </summary>
@@ -81,7 +132,7 @@ namespace Minesweeper
         /// Updates the state of a specific button.
         /// </summary>
         /// <param name="button">The button to update.</param>
-        void UpdateButton(Common.ButtonModel button);
+        void UpdateButton(ButtonModel button);
 
         /// <summary>
         /// Updates the board's state during the game after each move.

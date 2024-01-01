@@ -33,44 +33,58 @@ namespace Minesweeper.Common
             }, null);
         }
         /// <summary>
+        /// GameId
+        /// </summary>        
+        [Newtonsoft.Json.JsonProperty]
+        public int GameId { get; set; }
+        /// <summary>
         /// Message to display.
-        /// </summary>
+        /// </summary>        
+        [Newtonsoft.Json.JsonProperty]
         public string SuccessMessage { get; set; }
         /// <summary>
         /// Determines if game failed.
         /// </summary>
+        [Newtonsoft.Json.JsonProperty]
         public bool Failed { get; set; }
         /// <summary>
         /// Determines if game won.
         /// </summary>
+        [Newtonsoft.Json.JsonProperty]
         public bool Success { get; set; }
 
         /// <summary>
         /// Determines if initialized.
         /// </summary>
+        [Newtonsoft.Json.JsonProperty]
         public bool Initialized { get; set; }
         /// <summary>
         /// The name of the current player.
         /// </summary>
+        [Newtonsoft.Json.JsonProperty]
         public String Name { get; set; }
         /// <summary>
         /// The elapsed time playing the game.
         /// </summary>
+        [Newtonsoft.Json.JsonProperty]
         public TimeSpan Elapsed { get; set; }
 
         /// <summary>
         /// The size of the game board (i.e., the grid).
         /// </summary>
+        [Newtonsoft.Json.JsonProperty]
         public int Size { get; private set; }
 
         /// <summary>
         /// The grid of the game board.
         /// </summary>
+        [Newtonsoft.Json.JsonProperty]
         public ButtonModel[,] Grid { get; set; }
 
         /// <summary>
         /// The percentage of buttons that should be set to live.
         /// </summary>
+        [Newtonsoft.Json.JsonProperty]
         public int Difficulty { get; set; }
 
         /// <summary>

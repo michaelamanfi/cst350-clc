@@ -1,7 +1,8 @@
 ﻿using Minesweeper.Common;
 using Minesweeper.Models;
+using Newtonsoft.Json;
 using System.Collections.Generic;
-
+using System.Linq;
 namespace Minesweeper.Service
 {
     /// <summary>
@@ -11,9 +12,133 @@ namespace Minesweeper.Service
     {
         const int GridSize = 5;
         private Board<Models.ButtonModel> board;
-        public GameService()
+        private readonly IGameDAL _gameDAL;
+        private readonly IUserGameDAL  _userGameDAL;
+        private readonly IUserService _userService;
+        public GameService(IGameDAL gameDAL, IUserGameDAL userGameDAL, IUserService userService)
         {
+            this._userGameDAL = userGameDAL;
+            this._gameDAL = gameDAL;
+            this._userService = userService;
             board = new Board<Models.ButtonModel>(GridSize) { Difficulty = (int)DifficultyLevel.Moderate };
+        }
+
+        /// <summary>
+        /// Saves the current state of a game associated with a user.
+        /// </summary>
+        /// <param name="userName">The username associated with the game.</param>
+        /// <param name="gameModel">The game model containing the game's data.</param>
+        /// <remarks>
+        /// This method retrieves the user information based on the provided userName,
+        /// creates a new GameDbModel object with the game's state and associated user data,
+        /// and then saves this data to the database.
+        /// </remarks>
+        public void Save(string userName, GameModel gameModel)
+        {
+            UserModel userModel = _userService.GetUser(userName);
+            _gameDAL.CreateGame(new GameDbModel
+            {
+                DisplayName = gameModel.Name,
+                CreatedDate = System.DateTime.Now,
+                ModifiedDate = System.DateTime.Now,
+                StatusId = (int)GameStatus.InProgress,
+                UserId = userModel.UserId,
+                Json = JsonConvert.SerializeObject(board)
+            });
+        }
+
+        /// <summary>
+        /// Opens and initializes a game from a stored game state.
+        /// </summary>
+        /// <param name="gameModel">The game model containing the game's identification data.</param>
+        /// <remarks>
+        /// This method retrieves the stored game state using the game's ID from the database,
+        /// then deserializes the JSON data into a Board object.
+        /// It's assumed that the 'Json' field in the stored game state represents the serialized board.
+        /// </remarks>
+        public void Open(GameModel gameModel)
+        {
+            var game = _gameDAL.GetGameById(gameModel.ID);
+            board = JsonConvert.DeserializeObject<Board<Models.ButtonModel>>(game.Json);
+            board.GameId = game.GameId;
+        }
+
+        /// <summary>
+        /// Retrieves a list of all games.
+        /// </summary>
+        /// <returns>A list of GameModel representing all games.</returns>
+        /// <remarks>
+        /// This method fetches all games from the data access layer, and then projects
+        /// them into GameModel instances. It includes the game ID, display name, creation and 
+        /// modification dates, game status, and the full name of the user associated with each game.
+        /// </remarks>
+        public List<GameModel> GetAllGames()
+        {
+            var gameCollection = _userGameDAL.GetAllGames();
+            var games = from game in gameCollection
+                        select new GameModel
+                        {
+                            ID = game.GameId,
+                            Name = game.DisplayName,
+                            CreatedDate = game.CreatedDate,
+                            ModifiedDate = game.ModifiedDate,
+                            Status = ((GameStatus)game.StatusId).ToString(),
+                            UserFullName = $"{game.FirstName} {game.LastName}"
+                        };
+
+            return new List<GameModel>(games);
+        }
+
+        /// <summary>
+        /// Retrieves a specific game by its unique identifier.
+        /// </summary>
+        /// <param name="gameId">The unique identifier of the game.</param>
+        /// <returns>A GameModel representing the game if found; otherwise, null.</returns>
+        /// <remarks>
+        /// This method fetches a single game based on the provided game ID. It constructs
+        /// a GameModel that includes the game's ID, display name, creation and modification dates,
+        /// game status, and the full name of the associated user.
+        /// </remarks>
+        public GameModel GetGameById(int gameId)
+        {
+            var game = _userGameDAL.GetGameById(gameId);
+            if(game == null)   
+                return null;
+
+            return new GameModel
+            {
+                ID = game.GameId,
+                Name = game.DisplayName,
+                CreatedDate = game.CreatedDate,
+                ModifiedDate = game.ModifiedDate,
+                Status = ((GameStatus)game.StatusId).ToString(),
+                UserFullName = $"{game.FirstName} {game.LastName}"
+            };
+        }
+
+        public void DeleteGame(int id)
+        {
+            this._gameDAL.DeleteGame(id);
+        }
+        public bool HasValidGameId()
+        {
+            var game = _userGameDAL.GetGameById(board.GameId);
+            return (game != null);
+        }
+
+        /// <summary>
+        /// Saves the current state of a game associated with a user.
+        /// </summary>
+        /// <param name="gameStatus">Status of the game.</param>
+        public void UpdateGame(GameStatus gameStatus)
+        {
+            _gameDAL.UpdateGame(new GameDbModel
+            {
+                GameId = board.GameId,
+                ModifiedDate = System.DateTime.Now,
+                StatusId = (int)gameStatus,
+                Json = JsonConvert.SerializeObject(board)
+            });
         }
 
         /// <summary>
@@ -161,7 +286,7 @@ namespace Minesweeper.Service
         /// Updates the state of a specific button.
         /// </summary>
         /// <param name="button">The button to update.</param>
-        public void UpdateButton(Common.ButtonModel button)
+        public void UpdateButton(ButtonModel button)
         {
             if (button.Visited)
             {

@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Minesweeper.Models.GameModel>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                Game
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Created Date
+            </th>
+            <th>
+                Modified Date
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModifiedDate)
+            </td>
+            <td>
+                @if (item.Status == "InProgress") {
+                    @Html.ActionLink("Continue", "ContinueGame", new { id = item.ID })
+                    <text> | </text>
+                } else {
+                    <span class="text-muted">Continue</span>
+                    <text> | </text>
+                }
+                @Html.ActionLink("Delete", "DeleteGame", new { id = item.ID })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

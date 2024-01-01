@@ -44,6 +44,8 @@ namespace Minesweeper
                 options.Filters.Add(new AuthorizeFilter(policy));
             });
 
+            services.AddSingleton(typeof(IGameDAL), typeof(GameDAL));
+            services.AddSingleton(typeof(IUserGameDAL), typeof(UserGameDAL));
             services.AddSingleton(typeof(IUserDAL), typeof(UserDAL));
             services.AddSingleton(typeof(IUserService), typeof(UserService));
             services.AddSingleton(typeof(IPasswordHasherService), typeof(PasswordHasherService));

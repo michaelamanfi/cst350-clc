@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Minesweeper.Controllers
@@ -14,13 +15,28 @@ namespace Minesweeper.Controllers
     public class HomeController : Controller
     {              
         private readonly IGameService _gameService;
+        private readonly IUserService _userService;
         /// <summary>
         /// Initialize the controller with IGameService. 
         /// </summary>
         /// <param name="gameService"></param>
-        public HomeController(IGameService gameService)
+        public HomeController(IUserService userService, IGameService gameService)
         {
-            _gameService = gameService;
+            _userService = userService;
+               _gameService = gameService;
+        }
+        /// <summary>
+        /// Gets the username of the currently authenticated user.
+        /// </summary>
+        /// <returns>The username if the user is authenticated; otherwise, null.</returns>
+        public string GetCurrentUsername()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                return User.FindFirst(ClaimTypes.Name)?.Value;
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -88,6 +104,67 @@ namespace Minesweeper.Controllers
             return View("Index", buttons);
         }
         
+        public IActionResult Save()
+        {
+            if (this._gameService.HasValidGameId())
+            {
+                this._gameService.UpdateGame(GameStatus.InProgress);
+
+                // Get the buttons to display.
+                var buttons = this._gameService.GetAllButtons();
+
+                ViewBag.SuccessMessage = "Saved!";
+                // Send the button list to the "Index" page.
+                return View("Index", buttons);
+            }
+            else
+            {
+                return View("Save");
+            }
+        }
+
+        public IActionResult Games()
+        {
+            var games = this._gameService.GetAllGames();
+
+            // Send the button list to the "Index" page.
+            return View("ViewGame", games);
+        }
+        public IActionResult ProcessSave(GameModel model)
+        {
+            // Check if the current request is not a POST request
+            if (!HttpContext.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
+            {
+                var games = this._gameService.GetAllGames();                
+                return View("ViewGame", games);
+            }
+            else
+            {
+                this._gameService.Save(GetCurrentUsername(), model);
+
+                var games = this._gameService.GetAllGames();                
+                return View("ViewGame", games);
+            }
+        }
+        
+        [HttpGet("ContinueGame/{id}")]
+        public IActionResult ContinueGame(int id)
+        {
+            this._gameService.Open(new GameModel { ID = id });
+
+            var buttons = this._gameService.GetAllButtons();
+            return View("Index", buttons);
+        }
+
+        [HttpGet("DeleteGame/{id}")]
+        public IActionResult DeleteGame(int id)
+        {
+            this._gameService.DeleteGame(id);
+
+            var games = this._gameService.GetAllGames();
+            return View("ViewGame", games);
+        }
+
         /// <summary>
         /// Handles each button's right click.
         /// </summary>

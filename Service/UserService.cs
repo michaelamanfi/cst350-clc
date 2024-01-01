@@ -1,5 +1,7 @@
-﻿using Minesweeper.DAL;
+﻿using Microsoft.AspNetCore.Http;
+using Minesweeper.DAL;
 using Minesweeper.Models;
+using System.Security.Claims;
 
 namespace Minesweeper.Service
 {
@@ -37,6 +39,16 @@ namespace Minesweeper.Service
         public UserModel GetUser(int userId)
         {
             return _userDAL.GetUser(userId);
+        }
+
+        /// <summary>
+        /// Retrieves a user by their username.
+        /// </summary>
+        /// <param name="username">The username of the user.</param>
+        /// <returns>The user details if found, otherwise null.</returns>
+        public UserModel GetUser(string username)
+        {
+            return _userDAL.GetUser(username);
         }
         /// <summary>
         /// Checks if a username already exists.

@@ -8,10 +8,10 @@ namespace Minesweeper
     /// </summary>
     public interface IUserService
     {
-        /// <summary>
-        /// Deletes a user from the system.
-        /// </summary>
-        /// <param name="userId">The unique identifier of the user to be deleted.</param>
+            /// <summary>
+            /// Deletes a user from the system.
+            /// </summary>
+            /// <param name="userId">The unique identifier of the user to be deleted.</param>
         void DeleteUser(int userId);
 
         /// <summary>
@@ -20,6 +20,14 @@ namespace Minesweeper
         /// <param name="userId">The unique identifier of the user to retrieve.</param>
         /// <returns>A UserModel containing the details of the requested user. Returns null if the user is not found.</returns>
         UserModel GetUser(int userId);
+
+        /// <summary>
+        /// Retrieves a specific user's details.
+        /// </summary>
+        /// <param name="username">The username of the user to retrieve.</param>
+        /// <returns>A UserModel containing the details of the requested user. Returns null if the user is not found.</returns>
+        UserModel GetUser(string username);
+
         /// <summary>
         /// Checks if a username already exists.
         /// </summary>
