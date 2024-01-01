@@ -84,6 +84,15 @@ namespace Minesweeper.Controllers
             else
                 ViewBag.SuccessMessage = this._gameService.GetGameFailedMessage();
 
+            //Update game if it is a saved game.
+            if (this._gameService.HasValidGameId())
+            {
+                if (success)
+                    this._gameService.UpdateGame(GameStatus.Completed);
+                else
+                    this._gameService.UpdateGame(GameStatus.Failed);
+            }
+
             // Send the button list to the "Index" page.
             return View("Index", buttons);
         }
@@ -103,18 +112,26 @@ namespace Minesweeper.Controllers
             // Send the button list to the "Index" page.
             return View("Index", buttons);
         }
-        
+
+        /// <summary>
+        /// Saves the current game state.
+        /// </summary>
+        /// <returns>A view showing either the updated game or the Save page if no valid game ID is present.</returns>
+        /// <remarks>
+        /// If a valid game ID exists, this method updates the game status to InProgress,
+        /// retrieves all the game buttons, and displays them on the Index page.
+        /// If no valid game ID is found, it redirects to the Save page.
+        /// </remarks>
         public IActionResult Save()
         {
-            if (this._gameService.HasValidGameId())
+            if (_gameService.HasValidGameId())
             {
-                this._gameService.UpdateGame(GameStatus.InProgress);
+                _gameService.UpdateGame(GameStatus.InProgress);
 
-                // Get the buttons to display.
-                var buttons = this._gameService.GetAllButtons();
+                // Retrieve the updated buttons for display
+                var buttons = _gameService.GetAllButtons();
 
                 ViewBag.SuccessMessage = "Saved!";
-                // Send the button list to the "Index" page.
                 return View("Index", buttons);
             }
             else
@@ -123,48 +140,69 @@ namespace Minesweeper.Controllers
             }
         }
 
+        /// <summary>
+        /// Displays all the games.
+        /// </summary>
+        /// <returns>A view showing all the games.</returns>
         public IActionResult Games()
         {
-            var games = this._gameService.GetAllGames();
-
-            // Send the button list to the "Index" page.
+            var games = _gameService.GetAllGames();
             return View("ViewGame", games);
         }
+
+        /// <summary>
+        /// Processes the saving of a game.
+        /// </summary>
+        /// <param name="model">The game model to save.</param>
+        /// <returns>A view showing all games after processing the save.</returns>
+        /// <remarks>
+        /// This method handles the POST request to save a game. If the request is not POST,
+        /// it simply returns the ViewGame view with all games. Otherwise, it saves the game
+        /// and displays the updated list of games.
+        /// </remarks>
         public IActionResult ProcessSave(GameModel model)
         {
-            // Check if the current request is not a POST request
             if (!HttpContext.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
             {
-                var games = this._gameService.GetAllGames();                
+                var games = _gameService.GetAllGames();
                 return View("ViewGame", games);
             }
             else
             {
-                this._gameService.Save(GetCurrentUsername(), model);
+                _gameService.Save(GetCurrentUsername(), model);
 
-                var games = this._gameService.GetAllGames();                
+                var games = _gameService.GetAllGames();
                 return View("ViewGame", games);
             }
         }
-        
+
+        /// <summary>
+        /// Continues an existing game.
+        /// </summary>
+        /// <param name="id">The ID of the game to continue.</param>
+        /// <returns>A view of the game to be continued.</returns>
         [HttpGet("ContinueGame/{id}")]
         public IActionResult ContinueGame(int id)
         {
-            this._gameService.Open(new GameModel { ID = id });
+            _gameService.Open(new GameModel { ID = id });
 
-            var buttons = this._gameService.GetAllButtons();
+            var buttons = _gameService.GetAllButtons();
             return View("Index", buttons);
         }
 
+        /// <summary>
+        /// Deletes a game.
+        /// </summary>
+        /// <param name="id">The ID of the game to delete.</param>
+        /// <returns>A view showing all games after deletion.</returns>
         [HttpGet("DeleteGame/{id}")]
         public IActionResult DeleteGame(int id)
         {
-            this._gameService.DeleteGame(id);
+            _gameService.DeleteGame(id);
 
-            var games = this._gameService.GetAllGames();
+            var games = _gameService.GetAllGames();
             return View("ViewGame", games);
         }
-
         /// <summary>
         /// Handles each button's right click.
         /// </summary>

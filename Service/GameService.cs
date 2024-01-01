@@ -83,7 +83,8 @@ namespace Minesweeper.Service
                             CreatedDate = game.CreatedDate,
                             ModifiedDate = game.ModifiedDate,
                             Status = ((GameStatus)game.StatusId).ToString(),
-                            UserFullName = $"{game.FirstName} {game.LastName}"
+                            UserFullName = $"{game.FirstName} {game.LastName}",
+                             Json = game.Json
                         };
 
             return new List<GameModel>(games);
@@ -112,7 +113,8 @@ namespace Minesweeper.Service
                 CreatedDate = game.CreatedDate,
                 ModifiedDate = game.ModifiedDate,
                 Status = ((GameStatus)game.StatusId).ToString(),
-                UserFullName = $"{game.FirstName} {game.LastName}"
+                UserFullName = $"{game.FirstName} {game.LastName}",
+                Json = game.Json
             };
         }
 

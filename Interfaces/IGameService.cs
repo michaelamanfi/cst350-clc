@@ -9,9 +9,30 @@ namespace Minesweeper
     /// </summary>
     public interface IGameService
     {
+        /// <summary>
+        /// Deletes a game record from the database based on its ID.
+        /// </summary>
+        /// <param name="id">The ID of the game to delete.</param>
         void DeleteGame(int id);
 
+        /// <summary>
+        /// Checks if the current context has a valid game ID.
+        /// </summary>
+        /// <returns>True if the current context has a valid game ID; otherwise, false.</returns>
+        /// <remarks>
+        /// This method typically checks if the game ID in the current context (such as a session or a request) 
+        /// is valid. The implementation details may vary depending on how the game ID is stored and accessed.
+        /// </remarks>
         bool HasValidGameId();
+
+        /// <summary>
+        /// Updates the status of an existing game in the database.
+        /// </summary>
+        /// <param name="gameStatus">The new status to be set for the game.</param>
+        /// <remarks>
+        /// This method is used to update the status of a game, such as marking it as completed or in progress. 
+        /// The <paramref name="gameStatus"/> parameter should contain the new status to be applied to the game.
+        /// </remarks>
         void UpdateGame(GameStatus gameStatus);
 
         /// <summary>

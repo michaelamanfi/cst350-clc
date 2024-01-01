@@ -123,4 +123,3 @@ C:\OneDrive\BS Software Development\CST-350\CLC\Project\cst350-clc\obj\Debug\net
 C:\OneDrive\BS Software Development\CST-350\CLC\Project\cst350-clc\obj\Debug\netcoreapp3.1\Minesweeper.genruntimeconfig.cache
 C:\OneDrive\BS Software Development\CST-350\CLC\Project\cst350-clc\obj\Debug\netcoreapp3.1\Razor\Views\Home\Save.cshtml.g.cs
 C:\OneDrive\BS Software Development\CST-350\CLC\Project\cst350-clc\obj\Debug\netcoreapp3.1\Razor\Views\Home\ViewGame.cshtml.g.cs
-C:\OneDrive\BS Software Development\CST-350\CLC\Project\cst350-clc\obj\Debug\netcoreapp3.1\Minesweeper.csproj.AssemblyReference.cache

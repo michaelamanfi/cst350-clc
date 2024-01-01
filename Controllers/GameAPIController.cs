@@ -1,20 +1,28 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Minesweeper.Models;
 using System.Collections.Generic;
 
 namespace Minesweeper.Controllers
 {
     [Route("api")]
     [ApiController]
-    public class GameAPI : ControllerBase
+    [AllowAnonymous]
+    public class GameAPIController : ControllerBase
     {
+        private readonly IGameService _gameService;
+        public GameAPIController(IGameService gameService)
+        {
+            this._gameService = gameService;
+        }
         /// <summary>
         /// GET: api/showSavedGames - Displays all saved games.
         /// </summary>
         /// <returns></returns>
         [HttpGet("showSavedGames")]
-        public IEnumerable<string> Get()
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            return new JsonResult(this._gameService.GetAllGames());
         }
 
         /// <summary>
@@ -23,9 +31,9 @@ namespace Minesweeper.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("showSavedGames/{id}")]
-        public string Get(int id)
+        public IActionResult Get(int id)
         {
-            return "value";
+            return new JsonResult(this._gameService.GetGameById(id));
         }
 
         /// <summary>
@@ -33,8 +41,10 @@ namespace Minesweeper.Controllers
         /// </summary>
         /// <param name="id"></param>        
         [HttpDelete("deleteOneGame/{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            this._gameService.DeleteGame(id);
+            return Ok();
         }
     }
 }

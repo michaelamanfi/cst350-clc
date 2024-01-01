@@ -10,5 +10,6 @@ namespace Minesweeper.Models
         public string Status { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
+        public string Json { get; set; }
     }
 }
