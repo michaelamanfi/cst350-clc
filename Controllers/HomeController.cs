@@ -136,7 +136,18 @@ namespace Minesweeper.Controllers
             }
             else
             {
-                return View("Save");
+
+                bool gameEnded = this._gameService.GameEnded();
+                if (gameEnded)
+                {
+                    var buttons = _gameService.GetAllButtons();
+                    ViewBag.SuccessMessage = "Error: You cannot save completed games.";
+                    return View("Index", buttons);
+                }
+                else
+                {
+                    return View("Save");
+                }
             }
         }
 
