@@ -56,8 +56,7 @@
             {
                 var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.Username),
-                // You can add more claims here if needed
+                new Claim(ClaimTypes.Name, user.Username)
             };
 
                 var claimsIdentity = new ClaimsIdentity(
