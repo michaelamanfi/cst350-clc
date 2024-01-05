@@ -31,15 +31,6 @@ namespace BibleApplication.Controllers
         }
 
         /// <summary>
-        /// Displays the privacy policy page.
-        /// </summary>
-        /// <returns>The Privacy view.</returns>
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        /// <summary>
         /// Searches the Bible based on the provided search model and displays the results.
         /// </summary>
         /// <param name="searchModel">The search criteria.</param>

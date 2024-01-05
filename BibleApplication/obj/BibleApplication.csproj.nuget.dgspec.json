@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\OneDrive\\BS Software Development\\CST-350\\Week7\\BibleApplication\\BibleApplication.csproj": {}
+    "C:\\OneDrive\\BS Software Development\\CST-350\\CLC\\Project\\cst350-clc\\BibleApplication\\BibleApplication.csproj": {}
   },
   "projects": {
-    "C:\\OneDrive\\BS Software Development\\CST-350\\Week7\\BibleApplication\\BibleApplication.csproj": {
+    "C:\\OneDrive\\BS Software Development\\CST-350\\CLC\\Project\\cst350-clc\\BibleApplication\\BibleApplication.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\OneDrive\\BS Software Development\\CST-350\\Week7\\BibleApplication\\BibleApplication.csproj",
+        "projectUniqueName": "C:\\OneDrive\\BS Software Development\\CST-350\\CLC\\Project\\cst350-clc\\BibleApplication\\BibleApplication.csproj",
         "projectName": "BibleApplication",
-        "projectPath": "C:\\OneDrive\\BS Software Development\\CST-350\\Week7\\BibleApplication\\BibleApplication.csproj",
+        "projectPath": "C:\\OneDrive\\BS Software Development\\CST-350\\CLC\\Project\\cst350-clc\\BibleApplication\\BibleApplication.csproj",
         "packagesPath": "C:\\Users\\Michael\\.nuget\\packages\\",
-        "outputPath": "C:\\OneDrive\\BS Software Development\\CST-350\\Week7\\BibleApplication\\obj\\",
+        "outputPath": "C:\\OneDrive\\BS Software Development\\CST-350\\CLC\\Project\\cst350-clc\\BibleApplication\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

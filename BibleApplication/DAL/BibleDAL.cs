@@ -11,7 +11,7 @@ namespace BibleApplication.DAL
     /// </summary>
     public class BibleDAL : IBibleDAL
     {
-        private readonly string _connectionString = @"Data Source=C:\OneDrive\BS Software Development\CST-350\Week7\BibleApplication\bible-sqlite.db;";
+        private readonly string _connectionString = @"Data Source=C:\OneDrive\BS Software Development\CST-350\CLC\Project\cst350-clc\BibleApplication\bible-sqlite.db;";
 
         /// <summary>
         /// Default constructor

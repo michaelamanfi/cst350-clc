@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "iGtqkZky8mSnftgQIoPgu/5m24Wr+gZzEzLponu21hY3D8opLqSWEUqYO9AcvmR3FV25IcN+XN/4wDJ+ZASTPQ==",
+  "dgSpecHash": "sl6Rzdo9oDMHqeJgpu9T5IWl+5xEUVw6k4CgYRtczhRaCfCuNzfNGGS6INHdR20badU0ZC3FznjfUI4kWx4XDQ==",
   "success": true,
-  "projectFilePath": "C:\\OneDrive\\BS Software Development\\CST-350\\Week7\\BibleApplication\\BibleApplication.csproj",
+  "projectFilePath": "C:\\OneDrive\\BS Software Development\\CST-350\\CLC\\Project\\cst350-clc\\BibleApplication\\BibleApplication.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Michael\\.nuget\\packages\\microsoft.aspnetcore.html.abstractions\\2.2.0\\microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\Michael\\.nuget\\packages\\microsoft.aspnetcore.razor\\2.2.0\\microsoft.aspnetcore.razor.2.2.0.nupkg.sha512",
