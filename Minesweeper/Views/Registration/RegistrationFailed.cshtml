@@ -1,0 +1,12 @@
+﻿@model Minesweeper.Models.UserModel
+
+<div>
+    <h4>An error has occurred!</h4>
+    <hr/>
+    <p>The process of registering your account has encountered an error.</p>
+</div>
+
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Go Back</a>
+</div>
