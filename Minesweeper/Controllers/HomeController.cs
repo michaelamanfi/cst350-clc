@@ -141,7 +141,7 @@ namespace Minesweeper.Controllers
                 if (gameEnded)
                 {
                     var buttons = _gameService.GetAllButtons();
-                    ViewBag.SuccessMessage = "Error: You cannot save completed games.";
+                    ViewBag.SuccessMessage = "Error: You cannot save a completed game.";
                     return View("Index", buttons);
                 }
                 else
@@ -171,7 +171,7 @@ namespace Minesweeper.Controllers
         /// it simply returns the ViewGame view with all games. Otherwise, it saves the game
         /// and displays the updated list of games.
         /// </remarks>
-        public IActionResult ProcessSave(GameModel model)
+        public IActionResult SaveGame(GameModel model)
         {
             if (!HttpContext.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
             {

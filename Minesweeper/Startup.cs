@@ -52,9 +52,6 @@ namespace Minesweeper
             services.AddSingleton(typeof(IAuthenticationService), typeof(AuthenticationService));
             services.AddSingleton(typeof(IPasswordHasher<object>), typeof(PasswordHasher<object>));
             services.AddSingleton(typeof(IGameService), typeof(GameService));
-
-            
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
