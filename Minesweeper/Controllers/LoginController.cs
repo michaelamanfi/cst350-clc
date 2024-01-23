@@ -3,8 +3,12 @@
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
-    using Minesweeper.Models;    
+    using Minesweeper.Filters;
+    using Minesweeper.Logger;
+    using Minesweeper.Models;
+    using Newtonsoft.Json;
     using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading.Tasks;
@@ -17,14 +21,18 @@
     public class LoginController : Controller
     {
         private readonly Minesweeper.IAuthenticationService _authenticationService;
+        private readonly IUserService _userService;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LoginController"/>.
         /// </summary>
         /// <param name="authenticationService">The authentication service for handling user login operations.</param>
-        public LoginController(Minesweeper.IAuthenticationService authenticationService)
+        public LoginController(Minesweeper.IAuthenticationService authenticationService, IUserService userService, ILogger logger)
         {
             _authenticationService = authenticationService;
+            _userService = userService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -48,7 +56,8 @@
         /// This method authenticates the user using the provided credentials.
         /// If the credentials are valid, the LoginSuccess view is returned.
         /// If the credentials are invalid, the LoginFailure view is returned.
-        /// </remarks>
+        /// </remarks>        
+        [ServiceFilter(typeof(ProcessLoginLogActionFilter))]
         public async Task<IActionResult> ProcessLoginAsync(UserModel user)
         {
             bool valid = _authenticationService.Authenticate(user);
@@ -73,6 +82,10 @@
                     new ClaimsPrincipal(claimsIdentity),
                     authProperties);
 
+                //Save user data in the session.
+                var userData = _userService.GetUser(user.Username);
+                HttpContext.Session.SetString("user", JsonConvert.SerializeObject(userData));
+
                 return RedirectToAction("Index", "Home");
             }
             else
@@ -85,6 +98,14 @@
         /// <returns></returns>
         public async Task<IActionResult> Logout()
         {
+            string userData = HttpContext.Session.GetString("user");
+
+            if (!string.IsNullOrWhiteSpace(userData))
+            {
+                UserModel user = JsonConvert.DeserializeObject<UserModel>(userData);
+                _logger.Info("Logged out user: " + user.ToString());
+            }
+
             // Clear the existing external cookie
             await HttpContext.SignOutAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme);

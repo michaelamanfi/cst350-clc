@@ -78,5 +78,14 @@ namespace Minesweeper.Models
         [DataType(DataType.Password)]
         [StringLength(255, ErrorMessage = "Password cannot be longer than 255 characters.")]
         public string Password { get; set; }
+
+        /// <summary>
+        /// User info.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return $"UserId: {UserId} Username: {Username} Name: {FirstName} {LastName}";
+        }
     }
 }

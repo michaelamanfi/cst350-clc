@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "+9eCiMgzYZdM52qNdtuF1Rq5otoIe9cgWMK7ydXbfc2yNbnfwblZGgAmST3NFm1WKtgCB2vKksIsf16IwqH3Nw==",
+  "dgSpecHash": "FLJMgrEOFa15Hv2KzWBDi4s3B6I6U9QPXsqAcyTy5/UmtdVlkgzp47WsTioy2BF7E0RAJULrDOyvIiiyCwr/uw==",
   "success": true,
   "projectFilePath": "C:\\OneDrive\\BS Software Development\\CST-350\\CLC\\Project\\cst350-clc\\Minesweeper\\Minesweeper.csproj",
   "expectedPackageFiles": [
@@ -30,6 +30,7 @@
     "C:\\Users\\Michael\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
     "C:\\Users\\Michael\\.nuget\\packages\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",
     "C:\\Users\\Michael\\.nuget\\packages\\newtonsoft.json\\11.0.2\\newtonsoft.json.11.0.2.nupkg.sha512",
+    "C:\\Users\\Michael\\.nuget\\packages\\nlog\\5.2.8\\nlog.5.2.8.nupkg.sha512",
     "C:\\Users\\Michael\\.nuget\\packages\\nuget.frameworks\\4.7.0\\nuget.frameworks.4.7.0.nupkg.sha512",
     "C:\\Users\\Michael\\.nuget\\packages\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Users\\Michael\\.nuget\\packages\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",

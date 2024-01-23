@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Minesweeper.Common;
+using Minesweeper.Logger;
 using Minesweeper.Models;
 using System;
 using System.Collections.Generic;
@@ -16,14 +16,16 @@ namespace Minesweeper.Controllers
     {              
         private readonly IGameService _gameService;
         private readonly IUserService _userService;
+        private readonly ILogger _logger;
         /// <summary>
         /// Initialize the controller with IGameService. 
         /// </summary>
         /// <param name="gameService"></param>
-        public HomeController(IUserService userService, IGameService gameService)
+        public HomeController(IUserService userService, IGameService gameService, ILogger logger)
         {
             _userService = userService;
                _gameService = gameService;
+            _logger = logger;
         }
         /// <summary>
         /// Gets the username of the currently authenticated user.
@@ -84,6 +86,8 @@ namespace Minesweeper.Controllers
             else
                 ViewBag.SuccessMessage = this._gameService.GetGameFailedMessage();
 
+            _logger.Info(ViewBag.SuccessMessage);
+
             //Update game if it is a saved game.
             if (this._gameService.HasValidGameId())
             {
@@ -103,6 +107,7 @@ namespace Minesweeper.Controllers
         /// <returns></returns>
         public IActionResult Reset()
         {
+            _logger.Info("Resetting the game");
             //Reset the game.
             this._gameService.ResetGame();
 
@@ -142,6 +147,9 @@ namespace Minesweeper.Controllers
                 {
                     var buttons = _gameService.GetAllButtons();
                     ViewBag.SuccessMessage = "Error: You cannot save a completed game.";
+
+                    _logger.Error("You cannot save a completed game.");
+
                     return View("Index", buttons);
                 }
                 else
@@ -157,6 +165,7 @@ namespace Minesweeper.Controllers
         /// <returns>A view showing all the games.</returns>
         public IActionResult Games()
         {
+            _logger.Info("Displaying all games.");
             var games = _gameService.GetAllGames();
             return View("ViewGame", games);
         }
@@ -180,7 +189,10 @@ namespace Minesweeper.Controllers
             }
             else
             {
-                _gameService.Save(GetCurrentUsername(), model);
+                string user = GetCurrentUsername();
+                _logger.Info($"Saving current game for {user}");
+
+                _gameService.Save(user, model);
 
                 var games = _gameService.GetAllGames();
                 return View("ViewGame", games);

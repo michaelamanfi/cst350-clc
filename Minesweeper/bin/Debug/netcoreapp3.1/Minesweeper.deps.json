@@ -32,6 +32,7 @@
       "Minesweeper/1.0.0": {
         "dependencies": {
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "3.1.5",
+          "NLog": "5.2.8",
           "System.Configuration.ConfigurationManager": "8.0.0",
           "System.Data.SqlClient": "4.8.5",
           "Microsoft.AspNetCore.Antiforgery": "3.1.0.0",
@@ -797,6 +798,17 @@
         },
         "compile": {
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
+        }
+      },
+      "NLog/5.2.8": {
+        "runtime": {
+          "lib/netstandard2.0/NLog.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.2.8.2366"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/NLog.dll": {}
         }
       },
       "NuGet.Frameworks/4.7.0": {
@@ -3530,6 +3542,13 @@
       "sha512": "sha512-IvJe1pj7JHEsP8B8J8DwlMEx8UInrs/x+9oVY+oCD13jpLu4JbJU2WCIsMRn5C4yW9+DgkaO8uiVE5VHKjpmdQ==",
       "path": "newtonsoft.json/11.0.2",
       "hashPath": "newtonsoft.json.11.0.2.nupkg.sha512"
+    },
+    "NLog/5.2.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-jAIELkWBs1CXFPp986KSGpDFQZHCFccO+LMbKBTTNm42KifaI1mYzFMFQQfuGmGMTrCx0TFPhDjHDE4cLAZWiQ==",
+      "path": "nlog/5.2.8",
+      "hashPath": "nlog.5.2.8.nupkg.sha512"
     },
     "NuGet.Frameworks/4.7.0": {
       "type": "package",
