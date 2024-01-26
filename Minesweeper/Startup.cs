@@ -68,7 +68,11 @@ namespace Minesweeper
             services.AddSingleton(typeof(IUserService), typeof(UserService));
             services.AddSingleton(typeof(IPasswordHasherService), typeof(PasswordHasherService));
             services.AddSingleton(typeof(IAuthenticationService), typeof(AuthenticationService));
-            services.AddSingleton(typeof(IPasswordHasher<object>), typeof(PasswordHasher<object>));
+
+            //services.AddSingleton(typeof(IPasswordHasher<object>), typeof(PasswordHasher<object>));
+
+            services.AddSingleton(typeof(IPasswordHasher<object>), typeof(SimplePasswordHasher<object>));
+
             services.AddSingleton(typeof(IGameService), typeof(GameService));           
         }
 
